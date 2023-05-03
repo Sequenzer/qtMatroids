@@ -38,10 +38,34 @@ function matroidIncidence(M::Matroid,t::String="circuits")
     return incidence;
 end
 
+function getAdjacency(Inc::Matrix{Int64})
+    adj = zeros(Int64,size(Inc,1),size(Inc,1));
+    for i in 1:size(Inc,1)
+        for j in 1:size(Inc,1)
+            if i != j
+                adj[i,j] = sum(Inc[i,:].*Inc[j,:]);
+            end
+        end
+    end
+    return adj;
+end
 
-matroidIncidence(ex,"flats")
 
-ex
+function toAdjacency(Inc::Matrix{Int64})
+    t = hcat(zeros(Int64,size(Inc,1),size(Inc,1)),Inc)
+    t1 = hcat( transpose(Inc),zeros(Int64,size(Inc,2),size(Inc,2)))
+    adj = vcat(t,t1)
+    return adj
+end
+
+Inc = matroidIncidence(ex)
+
+toAdjacency(Inc)
+
+
+
+
+
 
 function autom_group(M::Matroid,t::String="circuits")
     if (t === "circuits")
@@ -66,10 +90,7 @@ end
 autom_group(ex,"circuits")
 autom_group(uni,"bases")
 
-
-##graph =Graph{Undirected}(4);
-##edg = [[2,3],[1,2],[1,4],[3,4],[1,3]];
-##foreach(x->add_edge!(graph,x[1],x[2]),edg);
-##
-##IncidenceMatrix(graph)
+graph =Graph{Undirected}(4);
+edg = [[2,3],[1,2],[1,4],[3,4],[1,3]];
+foreach(x->add_edge!(graph,x[1],x[2]),edg);
 
