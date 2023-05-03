@@ -38,17 +38,6 @@ function matroidIncidence(M::Matroid,t::String="circuits")
     return incidence;
 end
 
-function getAdjacency(Inc::Matrix{Int64})
-    adj = zeros(Int64,size(Inc,1),size(Inc,1));
-    for i in 1:size(Inc,1)
-        for j in 1:size(Inc,1)
-            if i != j
-                adj[i,j] = sum(Inc[i,:].*Inc[j,:]);
-            end
-        end
-    end
-    return adj;
-end
 
 
 function toAdjacency(Inc::Matrix{Int64})
