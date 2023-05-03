@@ -1,8 +1,8 @@
-#Hello Ther
+using Oscar: permutations
 
 using Oscar
 using Polymake
-
+using Combinatorics
 
 uni = uniform_matroid(2,4);
 circ = [[1,4,5],[2,3,5],[1,2,3,4]];
@@ -83,3 +83,46 @@ graph =Graph{Undirected}(4);
 edg = [[2,3],[1,2],[1,4],[3,4],[1,3]];
 foreach(x->add_edge!(graph,x[1],x[2]),edg);
 
+k4 = cycle_matroid(complete_graph(4));
+bases(k4)
+nonbases(k4)
+
+b1 = bases(k4)[1]
+nb1 = nonbases(k4)[1]
+
+function matroidRelations(M::Matroid)
+    nb = []
+    b = []
+    for base in bases(M)
+        b = vcat(b,collect(permutations(base)))
+    end
+    b
+
+    for nbase in nonbases(M)
+        nb = vcat(nb,collect(permutations(nbase)))
+    end
+    nb
+    r=rank(M)
+    rels=[]
+    for base in b
+        for nbase in nb
+            rel = []
+            for i in 1:r
+                push!(rel,(base[i],nbase[i]))
+            end
+            push!(rels,rel)
+        end
+    end
+    for base in b
+        for nbase in nb
+            rel = []
+            for i in 1:r
+                push!(rel,(nbase[i],base[i]))
+            end
+            push!(rels,rel)
+        end
+    end
+    return rels
+end
+
+matroidRelations(fano_matroid())
