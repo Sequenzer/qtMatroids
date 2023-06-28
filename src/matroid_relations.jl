@@ -54,7 +54,14 @@ function matroid_relations(relation_indices::Vector{Any}, n::Int)
                     end
             end
     end
+    i = 1
+    m = length(relation_indices)
     for relation in relation_indices
+        if i % 5000 == 0
+            percent = round(100*i/m,digits=2)
+            println("i = $i, percent = $percent %")
+        end
+        i+=1
         temp = one(A)
         for gen in relation
             temp = temp * u[gen[1], gen[2]]
